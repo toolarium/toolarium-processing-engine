@@ -5,9 +5,11 @@
  */
 package com.github.toolarium.processing.engine.impl.executer.impl;
 
+import com.github.toolarium.common.statistic.StatisticCounter;
 import com.github.toolarium.common.util.ThreadUtil;
 import com.github.toolarium.processing.engine.IProcessingListener;
-import com.github.toolarium.processing.engine.dto.ProcessingResult;
+import com.github.toolarium.processing.engine.dto.result.IProcessingStatistic;
+import com.github.toolarium.processing.engine.dto.result.ProcessingResult;
 import com.github.toolarium.processing.engine.impl.executer.IProcessingExecuter;
 import com.github.toolarium.processing.engine.impl.executer.ProcessingExecutionBuilder;
 import com.github.toolarium.processing.engine.impl.executer.dto.ProcessingExecuterPersistenceContainer;
@@ -15,13 +17,12 @@ import com.github.toolarium.processing.engine.impl.executer.dto.ProcessingUnitRe
 import com.github.toolarium.processing.engine.impl.status.IProcessingExecuterStatus;
 import com.github.toolarium.processing.engine.impl.status.ProcessingExecuterStatus;
 import com.github.toolarium.processing.engine.impl.util.ProcessingThreadFactory;
-import com.github.toolarium.processing.unit.IProcessStatus;
-import com.github.toolarium.processing.unit.IProcessingProgress;
 import com.github.toolarium.processing.unit.IProcessingUnit;
 import com.github.toolarium.processing.unit.IProcessingUnitContext;
+import com.github.toolarium.processing.unit.IProcessingUnitProgress;
 import com.github.toolarium.processing.unit.dto.Parameter;
 import com.github.toolarium.processing.unit.dto.ProcessingActionStatus;
-import com.github.toolarium.processing.unit.runtime.ProcessingProgress;
+import com.github.toolarium.processing.unit.runtime.IProcessingUnitRuntimeTimeMeasurement;
 import com.github.toolarium.processing.unit.runtime.ProcessingUnitContext;
 import com.github.toolarium.processing.unit.runtime.runnable.IProcessingUnitRunnable;
 import com.github.toolarium.processing.unit.runtime.runnable.IProcessingUnitRunnableListener;
@@ -30,9 +31,8 @@ import com.github.toolarium.processing.unit.util.ProcessingUnitUtil;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
 import java.util.concurrent.RejectedExecutionHandler;
 import java.util.concurrent.SynchronousQueue;
 import java.util.concurrent.ThreadPoolExecutor;
@@ -55,7 +55,7 @@ public class ProcessingExecuterImpl implements IProcessingExecuter, IProcessingU
     private IProcessingListener processingListener;
     private ProcessingExecuterPersistenceContainer processingExecuterPersistenceContainer;
     private ThreadPoolExecutor threadPoolExecutor;
-    private Executor cleanupExecutor = Executors.newSingleThreadExecutor();
+    //private Executor cleanupExecutor = Executors.newSingleThreadExecutor();
 
     
     /**
@@ -69,17 +69,18 @@ public class ProcessingExecuterImpl implements IProcessingExecuter, IProcessingU
         threadPoolExecutor.setThreadFactory(ProcessingThreadFactory.getInstance());
         threadPoolExecutor.setRejectedExecutionHandler(new RejectedExecutionHandler() {
             
+            /**
+             * @see java.util.concurrent.RejectedExecutionHandler#rejectedExecution(java.lang.Runnable, java.util.concurrent.ThreadPoolExecutor)
+             */
             @Override
             public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
             }
         });
-        
+
+        /*
         cleanupExecutor = Executors.newSingleThreadExecutor(ProcessingThreadFactory.getInstance());
         cleanupExecutor.execute(new Runnable() {
          
-            /**
-             * @see java.lang.Runnable#run()
-             */
             @Override
             public void run() {
                 boolean run = true;
@@ -101,7 +102,8 @@ public class ProcessingExecuterImpl implements IProcessingExecuter, IProcessingU
                     }
                 }
             }
-        });        
+        });  
+        */
     }
 
 
@@ -129,7 +131,12 @@ public class ProcessingExecuterImpl implements IProcessingExecuter, IProcessingU
     @Override
     public IProcessingUnitRunnable execute(String id, String name, Class<? extends IProcessingUnit> processingUnitClass, List<Parameter> parameterList, IProcessingUnitContext processingUnitContext) {
         List<IProcessingUnitRunnable> list = execute(new ProcessingExecutionBuilder().id(id).name(name).processingUnitClass(processingUnitClass).parameters(parameterList.toArray(Parameter[]::new)).build(), processingUnitContext);
-        return list.getFirst();
+        
+        if (!list.isEmpty()) {
+            return list.get(0);
+        }
+        
+        return null;
     }
 
     
@@ -167,9 +174,9 @@ public class ProcessingExecuterImpl implements IProcessingExecuter, IProcessingU
         return processingUnitRunnable;
     }
 
-    
+
     /**
-     * @see com.github.toolarium.processing.engine.impl.executer.IProcessingExecuter#execute(com.github.toolarium.processing.dto.ProcessingUnitExecuterState)
+     * @see com.github.toolarium.processing.engine.impl.executer.IProcessingExecuter#execute(com.github.toolarium.processing.engine.impl.executer.dto.ProcessingExecuterPersistenceContainer)
      */
     @Override
     public List<IProcessingUnitRunnable> execute(ProcessingExecuterPersistenceContainer processingExecuterPersistenceContainer) {
@@ -200,7 +207,7 @@ public class ProcessingExecuterImpl implements IProcessingExecuter, IProcessingU
         while (!processingUnitRunnableMap.isEmpty()) {
             for (ProcessingUnitRunnable p : processingUnitRunnableMap.values()) {
                 if (LOG.isDebugEnabled()) {
-                    LOG.debug(ProcessingUnitUtil.getInstance().preapre(p.getId(), p.getName(), null /*p.getprocessingUnitClass*/) + " wait on is going to: " + p.getProcessingActionStatus());
+                    LOG.debug(ProcessingUnitUtil.getInstance().toString(p.getId(), p.getName(), (String)null /*p.getprocessingUnitClass*/) + " wait on is going to: " + p.getProcessingActionStatus());
                 }
             }
             
@@ -253,23 +260,23 @@ public class ProcessingExecuterImpl implements IProcessingExecuter, IProcessingU
         return this;
     }
     
-    
+
     /**
-     * @see com.github.toolarium.processing.unit.runtime.runnable.IProcessingUnitRunnableListener#notifyProcessingUnitState(java.lang.String, java.lang.String, java.lang.Class, 
-     *      com.github.toolarium.processing.unit.dto.ProcessingActionStatus, com.github.toolarium.processing.unit.IProcessingUnitContext, com.github.toolarium.processing.unit.IProcessingProgress)
+     * @see com.github.toolarium.processing.unit.runtime.runnable.IProcessingUnitRunnableListener#notifyProcessingUnitState(java.lang.String, java.lang.String, java.lang.String, 
+     *      com.github.toolarium.processing.unit.dto.ProcessingActionStatus, com.github.toolarium.processing.unit.IProcessingUnitProgress, com.github.toolarium.processing.unit.runtime.IProcessingUnitRuntimeTimeMeasurement, 
+     *      com.github.toolarium.processing.unit.IProcessingUnitContext)
      */
     @Override
     public void notifyProcessingUnitState(String id, 
                                           String name, 
-                                          Class<? extends IProcessingUnit> processingUnitClass, 
-                                          ProcessingActionStatus processingActionStatus, 
-                                          IProcessingUnitContext processingUnitContext, 
-                                          IProcessingProgress processingProgress) {
+                                          String processingUnitClass, 
+                                          ProcessingActionStatus processingActionStatus,
+                                          IProcessingUnitProgress processingProgress,
+                                          IProcessingUnitRuntimeTimeMeasurement runtimeTimeMeasurment,
+                                          IProcessingUnitContext processingUnitContext) {
+    
         if (processingListener != null) {
-            final ProcessingProgress p = new ProcessingProgress();
-            p.init(processingProgress);
-            
-            processingListener.notifyProcessingUnitStateChange(id, name, processingUnitClass.getName(), processingActionStatus, new ProcessingUnitContext(processingUnitContext), p);
+            processingListener.notifyProcessingUnitState(id, name, processingUnitClass, processingActionStatus, processingProgress, runtimeTimeMeasurment, processingUnitContext);
         }
         
         if (ProcessingActionStatus.ABORTED.equals(processingActionStatus) || ProcessingActionStatus.ENDED.equals(processingActionStatus)) {
@@ -283,16 +290,52 @@ public class ProcessingExecuterImpl implements IProcessingExecuter, IProcessingU
                 ProcessingResult result = new ProcessingResult();
                 result.setId(processingUnitRunnable.getId());
                 result.setName(processingUnitRunnable.getName());
-                result.setStartTimestamp(processingUnitRunnable.getStartTimestamp());
-                result.setStopTimestamp(processingUnitRunnable.getStopTimestamp());
-                result.setProcessingDuration(processingUnitRunnable.getDuration());
+                result.setStartTimestamp(processingUnitRunnable.getTimeMeasurement().getStartTimestamp());
+                result.setStopTimestamp(processingUnitRunnable.getTimeMeasurement().getStopTimestamp());
+                result.setProcessingDuration(processingUnitRunnable.getTimeMeasurement().getDuration());
                 result.setNumberOfProcessedUnits(processingProgress.getNumberOfProcessedUnits());
                 result.setNumberOfSuccessfulUnits(processingProgress.getNumberOfSuccessfulUnits());
                 result.setNumberOfFailedUnits(processingProgress.getNumberOfFailedUnits());
                 result.setProcessingRuntimeStatus(processingUnitRunnable.getProcessingRuntimeStatus());
                 result.setIsAborted(ProcessingActionStatus.ABORTED.equals(processingActionStatus));
                 result.setStatusMessageList(processingUnitRunnable.getStatusMessageList());
-                result.setProcesingStatistic(processingProgress.getProcesingStatistic());
+                result.setProcessingStatistic(new IProcessingStatistic() {
+                 
+                    /**
+                     * @see com.github.toolarium.processing.engine.dto.result.IProcessingStatistic#keySet()
+                     */
+                    @Override
+                    public Set<String> keySet() {
+                        return processingProgress.getProcesingUnitStatistic().keySet();
+                    }
+
+
+                    /**
+                     * @see com.github.toolarium.processing.engine.dto.result.IProcessingStatistic#isEmpty()
+                     */
+                    @Override
+                    public boolean isEmpty() {
+                        return processingProgress.getProcesingUnitStatistic().isEmpty();
+                    }
+                    
+                    
+                    /**
+                     * @see com.github.toolarium.processing.engine.dto.result.IProcessingStatistic#hasKey(java.lang.String)
+                     */
+                    @Override
+                    public boolean hasKey(String key) {
+                        return processingProgress.getProcesingUnitStatistic().hasKey(key);
+                    }
+
+                    
+                    /**
+                     * @see com.github.toolarium.processing.engine.dto.result.IProcessingStatistic#get(java.lang.String)
+                     */
+                    @Override
+                    public StatisticCounter get(String key) {
+                        return processingProgress.getProcesingUnitStatistic().get(key);
+                    }
+                });
                 processingListener.notifyProcessEnd(result);
             }
         } else if (ProcessingActionStatus.SUSPENDED.equals(processingActionStatus)) {
@@ -307,7 +350,7 @@ public class ProcessingExecuterImpl implements IProcessingExecuter, IProcessingU
             }
         } else {
             if (LOG.isDebugEnabled()) {
-                LOG.debug(ProcessingUnitUtil.getInstance().preapre(id, name, processingUnitClass) + " is going to: " + processingActionStatus);
+                LOG.debug(ProcessingUnitUtil.getInstance().toString(id, name, processingUnitClass) + " is going to: " + processingActionStatus);
             }
         }
     }

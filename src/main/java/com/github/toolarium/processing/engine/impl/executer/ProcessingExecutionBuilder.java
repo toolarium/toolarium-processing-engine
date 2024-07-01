@@ -37,7 +37,9 @@ public class ProcessingExecutionBuilder {
      * @return the builder
      */
     public ProcessingExecutionBuilder id(String id) {
-        list.getLast().setId(id);
+        if (list != null && !list.isEmpty()) {
+            list.get(list.size() - 1).setId(id);
+        }
         return this;
     }
 
@@ -49,7 +51,9 @@ public class ProcessingExecutionBuilder {
      * @return the builder
      */
     public ProcessingExecutionBuilder name(String name) {
-        list.getLast().setName(name);
+        if (list != null && !list.isEmpty()) {
+            list.get(list.size() - 1).setName(name);
+        }
         return this;
     }
 
@@ -75,7 +79,10 @@ public class ProcessingExecutionBuilder {
      * @throws IllegalArgumentException In case of invalid processing unit class
      */
     public ProcessingExecutionBuilder processingUnitClass(Class<? extends IProcessingUnit> processingUnitClass) throws IllegalArgumentException {
-        list.getLast().setProcessingUnitClass(processingUnitClass);
+        if (list != null && !list.isEmpty()) {
+            list.get(list.size() - 1).setProcessingUnitClass(processingUnitClass);
+        }
+
         validateProcessingUnitClass();        
         return this;
     }
@@ -88,7 +95,10 @@ public class ProcessingExecutionBuilder {
      * @return the builder
      */
     public ProcessingExecutionBuilder parameter(Parameter parameter) {
-        list.getLast().getParameterList().add(parameter);
+        if (list != null && !list.isEmpty()) {
+            list.get(list.size() - 1).getParameterList().add(parameter);
+        }
+        
         return this;
     }
 
@@ -101,7 +111,9 @@ public class ProcessingExecutionBuilder {
      */
     public ProcessingExecutionBuilder parameters(Parameter... parameters) {
         for (Parameter p : parameters) {
-            list.getLast().getParameterList().add(p);
+            if (list != null && !list.isEmpty()) {
+                list.get(list.size() - 1).getParameterList().add(p);
+            }
         }
         return this;
     }
@@ -113,7 +125,7 @@ public class ProcessingExecutionBuilder {
      * @return the builder
      * @throws IllegalArgumentException In case of invalid processing unit class
      */
-    public ProcessingExecutionBuilder chain() throws IllegalArgumentException {
+    public ProcessingExecutionBuilder newProcessingUnit() throws IllegalArgumentException {
         validateProcessingUnitClass();
         
         list.add(new ProcessingUnitReference(null, new ArrayList<Parameter>()));
@@ -139,7 +151,7 @@ public class ProcessingExecutionBuilder {
      * @throws IllegalArgumentException In case of invalid processing unit class
      */
     protected void validateProcessingUnitClass() throws IllegalArgumentException {
-        if (list.getLast().getProcessingUnitClass() == null) {
+        if (list != null && !list.isEmpty() && list.get(list.size() - 1).getProcessingUnitClass() == null) {
             throw new IllegalArgumentException("Can't add a new processing unit because the current don't has any processing unit class!");
         }
     }

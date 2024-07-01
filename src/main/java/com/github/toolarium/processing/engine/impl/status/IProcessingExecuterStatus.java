@@ -5,7 +5,7 @@
  */
 package com.github.toolarium.processing.engine.impl.status;
 
-import com.github.toolarium.processing.engine.dto.IProcessingEngineStatus;
+import com.github.toolarium.processing.engine.IProcessingEngineStatus;
 
 /**
  * Defines the processing executer status

@@ -8,8 +8,11 @@ package com.github.toolarium.processing.engine;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
 
+import com.github.toolarium.common.util.TextUtil;
 import com.github.toolarium.common.util.ThreadUtil;
-import com.github.toolarium.processing.engine.dto.IProcessingUnit;
+import com.github.toolarium.processing.engine.dto.unit.IProcessingUnit;
+import com.github.toolarium.processing.engine.impl.util.ProcessingPersistenceUtil;
+import com.github.toolarium.processing.engine.listener.LogProcessingListener;
 import com.github.toolarium.processing.engine.unit.ProcessingUnitSample;
 import com.github.toolarium.processing.engine.unit.ProcessingUnitSample2;
 import com.github.toolarium.processing.unit.dto.Parameter;
@@ -36,6 +39,7 @@ public class ProcessingEngineTest {
     @Test
     public void test() {
         IProcessEngine processEngine = ProcessingEngineFactory.getInstance().getProcessingEngine();
+        processEngine.addListener(new LogProcessingListener());
 
         // register processing
         IProcessingUnit p1 =  processEngine.getProcessingUnitRegistry().register(ProcessingUnitSample.class);
@@ -70,12 +74,11 @@ public class ProcessingEngineTest {
     @Test
     public void testSuspendAndResume() {
         IProcessEngine processEngine = ProcessingEngineFactory.getInstance().getProcessingEngine();
-        //processEngine.addListener(new );
+        processEngine.addListener(new LogProcessingListener());
 
         // register processing
         IProcessingUnit p1 =  processEngine.getProcessingUnitRegistry().register(ProcessingUnitSample.class);
         IProcessingUnit p2 = processEngine.getProcessingUnitRegistry().register(ProcessingUnitSample2.class.getName());
-        
 
         // start processing
         processEngine.execute(UUID.randomUUID().toString(), "test1", p1.getName(),
@@ -89,10 +92,13 @@ public class ProcessingEngineTest {
         // suspend all processings
         byte[] persistedContent = processEngine.shutdown();
         assertNotNull(persistedContent); 
+        
+        LOG.info("Persisted state:" + TextUtil.NL + ProcessingPersistenceUtil.getInstance().toString(persistedContent));
         processEngine = null;
         
         LOG.info("Resume...");
         processEngine = ProcessingEngineFactory.getInstance().getProcessingEngine(persistedContent);
+        processEngine.addListener(new LogProcessingListener());
         
         // wait processing
         while (processEngine.getStatus().getNumberOfRunningProcessings() > 0) {

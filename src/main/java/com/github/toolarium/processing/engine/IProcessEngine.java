@@ -5,7 +5,6 @@
  */
 package com.github.toolarium.processing.engine;
 
-import com.github.toolarium.processing.engine.dto.IProcessingEngineStatus;
 import com.github.toolarium.processing.unit.dto.Parameter;
 import com.github.toolarium.processing.unit.runtime.runnable.IProcessingUnitRunnable;
 import java.util.List;

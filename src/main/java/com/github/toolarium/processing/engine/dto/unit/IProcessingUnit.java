@@ -3,9 +3,11 @@
  *
  * Copyright by toolarium, all rights reserved.
  */
-package com.github.toolarium.processing.engine.dto;
+package com.github.toolarium.processing.engine.dto.unit;
 
+import com.github.toolarium.processing.engine.dto.parameter.IParameterDefinition;
 import java.util.List;
+
 
 /**
  * The processing unit

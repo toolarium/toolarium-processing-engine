@@ -3,9 +3,8 @@
  *
  * Copyright by toolarium, all rights reserved.
  */
-package com.github.toolarium.processing.engine.dto;
+package com.github.toolarium.processing.engine.dto.result;
 
-import com.github.toolarium.processing.unit.IProcessingStatistic;
 import com.github.toolarium.processing.unit.dto.ProcessingRuntimeStatus;
 import java.time.Instant;
 import java.util.List;
@@ -48,7 +47,7 @@ public interface IProcessingResult {
      * @return the start time stamp
      */
     Instant getStartTimestamp();
-    
+
     
     /**
      * Get the end time stamp when it has ended

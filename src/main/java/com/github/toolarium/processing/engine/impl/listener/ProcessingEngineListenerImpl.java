@@ -6,10 +6,11 @@
 package com.github.toolarium.processing.engine.impl.listener;
 
 import com.github.toolarium.processing.engine.IProcessingListener;
-import com.github.toolarium.processing.engine.dto.IProcessingResult;
-import com.github.toolarium.processing.unit.IProcessingProgress;
+import com.github.toolarium.processing.engine.dto.result.IProcessingResult;
 import com.github.toolarium.processing.unit.IProcessingUnitContext;
+import com.github.toolarium.processing.unit.IProcessingUnitProgress;
 import com.github.toolarium.processing.unit.dto.ProcessingActionStatus;
+import com.github.toolarium.processing.unit.runtime.IProcessingUnitRuntimeTimeMeasurement;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,7 +43,7 @@ public class ProcessingEngineListenerImpl implements IProcessingListener {
 
 
     /**
-     * @see com.github.toolarium.processing.engine.IProcessingListener#notifyProcessEnd(com.github.toolarium.processing.engine.dto.IProcessingResult)
+     * @see com.github.toolarium.processing.engine.IProcessingListener#notifyProcessEnd(com.github.toolarium.processing.engine.dto.result.IProcessingResult)
      */
     @Override
     public void notifyProcessEnd(IProcessingResult processingResult) {
@@ -51,15 +52,21 @@ public class ProcessingEngineListenerImpl implements IProcessingListener {
         }
     }
 
-    
+
     /**
-     * @see com.github.toolarium.processing.engine.IProcessingListener#notifyProcessingUnitStateChange(java.lang.String, java.lang.String, java.lang.String, com.github.toolarium.processing.unit.dto.ProcessingActionStatus, 
-     *      com.github.toolarium.processing.unit.IProcessingUnitContext, com.github.toolarium.processing.unit.IProcessingProgress)
+     * @see com.github.toolarium.processing.engine.IProcessingListener#notifyProcessingUnitState(java.lang.String, java.lang.String, java.lang.String, com.github.toolarium.processing.unit.dto.ProcessingActionStatus, 
+     *      com.github.toolarium.processing.unit.IProcessingUnitProgress, com.github.toolarium.processing.unit.runtime.IProcessingUnitRuntimeTimeMeasurement, com.github.toolarium.processing.unit.IProcessingUnitContext)
      */
     @Override
-    public void notifyProcessingUnitStateChange(String id, String name, String processingUnitClass, ProcessingActionStatus processingActionStatus, IProcessingUnitContext processingUnitContext, IProcessingProgress processingProgress) {
+    public void notifyProcessingUnitState(String id, 
+                                          String name, 
+                                          String processingUnitClass,
+                                          ProcessingActionStatus processingActionStatus, 
+                                          IProcessingUnitProgress processingUnitProgress,
+                                          IProcessingUnitRuntimeTimeMeasurement runtimeTimeMeasurment, 
+                                          IProcessingUnitContext processingUnitContext) {
         for (IProcessingListener l : processingListeners) {
-            l.notifyProcessingUnitStateChange(id, name, processingUnitClass, processingActionStatus, processingUnitContext, processingProgress);
+            l.notifyProcessingUnitState(id, name, processingUnitClass, processingActionStatus, processingUnitProgress, runtimeTimeMeasurment, processingUnitContext);
         }
     }
 }

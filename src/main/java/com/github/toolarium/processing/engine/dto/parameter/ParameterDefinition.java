@@ -3,7 +3,7 @@
  *
  * Copyright by toolarium, all rights reserved.
  */
-package com.github.toolarium.processing.engine.dto;
+package com.github.toolarium.processing.engine.dto.parameter;
 
 import com.github.toolarium.processing.unit.dto.ParameterValueType;
 import java.io.Serializable;
@@ -17,7 +17,7 @@ import java.util.Objects;
 public class ParameterDefinition implements IParameterDefinition, Serializable {
     private static final long serialVersionUID = -5514542112859843338L;
     private final String key;
-    private final ParameterValueType valueDataType;
+    private final ParameterValueType valueType;
     private final String defaultValue;
     private final boolean isOptional;
     private final int minOccurs;
@@ -34,7 +34,7 @@ public class ParameterDefinition implements IParameterDefinition, Serializable {
      */
     public ParameterDefinition(com.github.toolarium.processing.unit.dto.ParameterDefinition parameterDefinition) {
         this.key = parameterDefinition.getKey();
-        this.valueDataType = parameterDefinition.getValueDataType();
+        this.valueType = parameterDefinition.getValueType();
         this.defaultValue = "" + parameterDefinition.getDefaultValue();
         this.isOptional = parameterDefinition.isOptional();
         this.minOccurs = parameterDefinition.getMinOccurs();
@@ -46,7 +46,7 @@ public class ParameterDefinition implements IParameterDefinition, Serializable {
     
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IParameterDefinition#getKey()
+     * @see com.github.toolarium.processing.engine.dto.parameter.IParameterDefinition#getKey()
      */
     @Override
     public String getKey() {
@@ -55,16 +55,16 @@ public class ParameterDefinition implements IParameterDefinition, Serializable {
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IParameterDefinition#getValueDataType()
+     * @see com.github.toolarium.processing.engine.dto.parameter.IParameterDefinition#getValueType()
      */
     @Override
-    public ParameterValueType getValueDataType() {
-        return valueDataType;
+    public ParameterValueType getValueType() {
+        return valueType;
     }
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IParameterDefinition#getDefaultValue()
+     * @see com.github.toolarium.processing.engine.dto.parameter.IParameterDefinition#getDefaultValue()
      */
     @Override
     public String getDefaultValue() {
@@ -73,7 +73,7 @@ public class ParameterDefinition implements IParameterDefinition, Serializable {
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IParameterDefinition#isOptional()
+     * @see com.github.toolarium.processing.engine.dto.parameter.IParameterDefinition#isOptional()
      */
     @Override
     public boolean isOptional() {
@@ -82,7 +82,7 @@ public class ParameterDefinition implements IParameterDefinition, Serializable {
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IParameterDefinition#getMinOccurs()
+     * @see com.github.toolarium.processing.engine.dto.parameter.IParameterDefinition#getMinOccurs()
      */
     @Override
     public int getMinOccurs() {
@@ -91,7 +91,7 @@ public class ParameterDefinition implements IParameterDefinition, Serializable {
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IParameterDefinition#getMaxOccurs()
+     * @see com.github.toolarium.processing.engine.dto.parameter.IParameterDefinition#getMaxOccurs()
      */
     @Override
     public int getMaxOccurs() {
@@ -100,7 +100,7 @@ public class ParameterDefinition implements IParameterDefinition, Serializable {
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IParameterDefinition#isEmptyValueAllowed()
+     * @see com.github.toolarium.processing.engine.dto.parameter.IParameterDefinition#isEmptyValueAllowed()
      */
     @Override
     public boolean isEmptyValueAllowed() {
@@ -109,7 +109,7 @@ public class ParameterDefinition implements IParameterDefinition, Serializable {
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IParameterDefinition#hasValueToProtect()
+     * @see com.github.toolarium.processing.engine.dto.parameter.IParameterDefinition#hasValueToProtect()
      */
     @Override
     public boolean hasValueToProtect() {
@@ -118,7 +118,7 @@ public class ParameterDefinition implements IParameterDefinition, Serializable {
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IParameterDefinition#getDescription()
+     * @see com.github.toolarium.processing.engine.dto.parameter.IParameterDefinition#getDescription()
      */
     @Override
     public String getDescription() {
@@ -132,7 +132,7 @@ public class ParameterDefinition implements IParameterDefinition, Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(defaultValue, description, hasValueToProtect, isEmptyValueAllowed, isOptional, key,
-                maxOccurs, minOccurs, valueDataType);
+                maxOccurs, minOccurs, valueType);
     }
 
     
@@ -157,7 +157,7 @@ public class ParameterDefinition implements IParameterDefinition, Serializable {
         return Objects.equals(defaultValue, other.defaultValue) && Objects.equals(description, other.description)
                 && hasValueToProtect == other.hasValueToProtect && isEmptyValueAllowed == other.isEmptyValueAllowed
                 && isOptional == other.isOptional && Objects.equals(key, other.key) && maxOccurs == other.maxOccurs
-                && minOccurs == other.minOccurs && valueDataType == other.valueDataType;
+                && minOccurs == other.minOccurs && valueType == other.valueType;
     }
 
 
@@ -166,7 +166,7 @@ public class ParameterDefinition implements IParameterDefinition, Serializable {
      */
     @Override
     public String toString() {
-        return "ParameterDefinition [key=" + key + ", valueDataType=" + valueDataType + ", defaultValue=" + defaultValue
+        return "ParameterDefinition [key=" + key + ", valueDataType=" + valueType + ", defaultValue=" + defaultValue
                 + ", isOptional=" + isOptional + ", minOccurs=" + minOccurs + ", maxOccurs=" + maxOccurs
                 + ", isEmptyValueAllowed=" + isEmptyValueAllowed + ", hasValueToProtect=" + hasValueToProtect
                 + ", description=" + description + "]";

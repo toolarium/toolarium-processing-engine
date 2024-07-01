@@ -3,7 +3,7 @@
  *
  * Copyright by toolarium, all rights reserved.
  */
-package com.github.toolarium.processing.engine.dto;
+package com.github.toolarium.processing.engine.dto.parameter;
 
 import com.github.toolarium.processing.unit.dto.ParameterValueType;
 
@@ -24,11 +24,11 @@ public interface IParameterDefinition {
 
     
     /**
-     * Gets the value data type
+     * Gets the data type
      *
      * @return the data type
      */
-    ParameterValueType getValueDataType();
+    ParameterValueType getValueType();
 
     
     /**

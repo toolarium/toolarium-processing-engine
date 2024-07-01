@@ -5,10 +5,11 @@
  */
 package com.github.toolarium.processing.engine;
 
-import com.github.toolarium.processing.engine.dto.IProcessingResult;
-import com.github.toolarium.processing.unit.IProcessingProgress;
+import com.github.toolarium.processing.engine.dto.result.IProcessingResult;
 import com.github.toolarium.processing.unit.IProcessingUnitContext;
+import com.github.toolarium.processing.unit.IProcessingUnitProgress;
 import com.github.toolarium.processing.unit.dto.ProcessingActionStatus;
+import com.github.toolarium.processing.unit.runtime.IProcessingUnitRuntimeTimeMeasurement;
 
 
 /**
@@ -27,14 +28,21 @@ public interface IProcessingListener {
 
     
     /**
-     * Notify processing unit state change
+     * Notify processing unit action status
      *
      * @param id the unique id of this processing 
      * @param name the name of this processing unit runnable
      * @param processingUnitClass the processing unit class
      * @param processingActionStatus the processing action status
+     * @param processingUnitProgress the processing unit progress 
+     * @param runtimeTimeMeasurment the runtime time measurement
      * @param processingUnitContext the processing unit context
-     * @param processingProgress the processing progress 
      */
-    void notifyProcessingUnitStateChange(String id, String name, String processingUnitClass, ProcessingActionStatus processingActionStatus, IProcessingUnitContext processingUnitContext, IProcessingProgress processingProgress);
+    void notifyProcessingUnitState(String id, 
+                                   String name, 
+                                   String processingUnitClass, 
+                                   ProcessingActionStatus processingActionStatus,
+                                   IProcessingUnitProgress processingUnitProgress,
+                                   IProcessingUnitRuntimeTimeMeasurement runtimeTimeMeasurment,
+                                   IProcessingUnitContext processingUnitContext);
 }

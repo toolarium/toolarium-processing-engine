@@ -7,10 +7,10 @@ package com.github.toolarium.processing.engine.impl.registry;
 
 import com.github.toolarium.common.util.ClassInstanceUtil;
 import com.github.toolarium.processing.engine.IProcessingUnitRegistry;
-import com.github.toolarium.processing.engine.dto.IParameterDefinition;
-import com.github.toolarium.processing.engine.dto.IProcessingUnit;
-import com.github.toolarium.processing.engine.dto.ParameterDefinition;
-import com.github.toolarium.processing.engine.dto.ProcessingUnit;
+import com.github.toolarium.processing.engine.dto.parameter.IParameterDefinition;
+import com.github.toolarium.processing.engine.dto.parameter.ParameterDefinition;
+import com.github.toolarium.processing.engine.dto.unit.IProcessingUnit;
+import com.github.toolarium.processing.engine.dto.unit.ProcessingUnit;
 import com.github.toolarium.processing.engine.exception.ValidationException;
 import java.util.ArrayList;
 import java.util.List;

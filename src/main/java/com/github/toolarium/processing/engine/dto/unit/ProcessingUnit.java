@@ -3,8 +3,9 @@
  *
  * Copyright by toolarium, all rights reserved.
  */
-package com.github.toolarium.processing.engine.dto;
+package com.github.toolarium.processing.engine.dto.unit;
 
+import com.github.toolarium.processing.engine.dto.parameter.IParameterDefinition;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
@@ -41,7 +42,7 @@ public class ProcessingUnit implements IProcessingUnit, Serializable, Comparable
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingUnit#getName()
+     * @see com.github.toolarium.processing.engine.dto.unit.IProcessingUnit#getName()
      */
     @Override
     public String getName() {
@@ -60,7 +61,7 @@ public class ProcessingUnit implements IProcessingUnit, Serializable, Comparable
 
 
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingUnit#getParameterDefinitionList()
+     * @see com.github.toolarium.processing.engine.dto.unit.IProcessingUnit#getParameterDefinitionList()
      */
     @Override
     public List<IParameterDefinition> getParameterDefinitionList() {

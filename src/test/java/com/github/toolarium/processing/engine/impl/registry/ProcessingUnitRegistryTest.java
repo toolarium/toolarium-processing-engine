@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import com.github.toolarium.processing.engine.dto.IProcessingUnit;
+import com.github.toolarium.processing.engine.dto.unit.IProcessingUnit;
 import com.github.toolarium.processing.engine.unit.ProcessingUnitSample;
 import com.github.toolarium.processing.engine.unit.ProcessingUnitSample2;
 import org.junit.jupiter.api.Test;
@@ -33,7 +33,7 @@ public class ProcessingUnitRegistryTest {
         IProcessingUnit processingUnit = ProcessingUnitRegistry.getInstance().register(ProcessingUnitSample.class);
         assertEquals(processingUnit.getName(), ProcessingUnitSample.class.getName());
         assertEquals("[ParameterDefinition [key=inputFilename, valueDataType=STRING, defaultValue=null, isOptional=false, "
-                     + "minOccurs=1, maxOccurs=1, isEmptyValueAllowed=false, hasValueToProtect=false, "
+                     + "minOccurs=1, maxOccurs=1, isEmptyValueAllowed=true, hasValueToProtect=false, "
                      + "description=The filename incl. path to read in a file.]]", 
                      processingUnit.getParameterDefinitionList().toString());
         

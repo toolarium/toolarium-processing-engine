@@ -5,8 +5,10 @@
  */
 package com.github.toolarium.processing.engine.impl.util;
 
+import com.github.toolarium.common.util.TextUtil;
 import com.github.toolarium.processing.engine.impl.executer.dto.ProcessingExecuterPersistenceContainer;
 import com.github.toolarium.processing.unit.exception.ProcessingException;
+import com.github.toolarium.processing.unit.util.ProcessingUnitUtil;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -94,5 +96,29 @@ public final class ProcessingPersistenceUtil {
         } catch (RuntimeException | ClassNotFoundException | IOException e) {
             throw new ProcessingException("Could not de-serialize processing persistence conatiner: " + e.getMessage(), e, true);
         }
+    }
+    
+    
+    /**
+     * Get the persisted state as string 
+     *
+     * @param persistedState the persisted state
+     * @return the string re-presenation
+     */
+    public String toString(byte[] persistedState) {
+        ProcessingExecuterPersistenceContainer processingExecuterPersistenceContainer = toProcessingExecuterPersistenceContainer(persistedState);
+        if (processingExecuterPersistenceContainer == null || processingExecuterPersistenceContainer.getSuspendedStateList().isEmpty()) {
+            return null;
+        }
+        
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < processingExecuterPersistenceContainer.getSuspendedStateList().size(); i++) {
+            builder.append(ProcessingUnitUtil.getInstance().toString(processingExecuterPersistenceContainer.getSuspendedStateList().get(i)));
+            if ((i + 1) < processingExecuterPersistenceContainer.getSuspendedStateList().size()) {
+                builder.append(TextUtil.NL);
+            }
+        }
+
+        return builder.toString();
     }
 }

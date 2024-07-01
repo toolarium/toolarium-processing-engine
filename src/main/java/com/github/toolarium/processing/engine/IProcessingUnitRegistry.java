@@ -5,7 +5,7 @@
  */
 package com.github.toolarium.processing.engine;
 
-import com.github.toolarium.processing.engine.dto.IProcessingUnit;
+import com.github.toolarium.processing.engine.dto.unit.IProcessingUnit;
 import com.github.toolarium.processing.engine.exception.ValidationException;
 import java.util.Set;
 

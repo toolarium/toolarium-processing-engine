@@ -1,8 +1,7 @@
 /*
  * build.gradle
  *
- * Copyright by toolarium-processing-engine, all rights reserved.
- * MIT License: https://mit-license.org
+ * Copyright by toolarium, all rights reserved.
  */
 plugins {
   id 'com.github.johnrengelman.shadow' version '8.1.1'
@@ -14,20 +13,21 @@ apply from: "https://raw.githubusercontent.com/toolarium/common-gradle-build/mas
 /***************************************************************************************
  * define the main class name
  ***************************************************************************************/
-mainClassName = "com.github.toolarium.processing.engine.MyApplication"
+mainClassName = "com.github.toolarium.processing.engine.Main"
 
 
 /****************************************************************************************
  * Define project dependencies
  ****************************************************************************************/
 dependencies {
-    // see https://docs.gradle.org/current/userguide/java_library_plugin.html
 
-    // utilities    
-    //implementation "net.sf.jptools:jptools:${commonGradleJptoolsVersion}"
-    //implementation "net.sf.jptools:jptools:${commonGradleJptoolsVersion}:slf4j-redirect"
+    // toolarium common
+    implementation "com.github.toolarium:toolarium-common:0.8.0"
+
+    // processing unit
+    implementation "com.github.toolarium:toolarium-processing-unit:1.2.1-SNAPSHOT"
 
     // logging
     implementation "org.slf4j:slf4j-api:${commonGradleSlf4jApiVersion}"
-    implementation "ch.qos.logback:logback-classic:${commonGradleLogbackVersion}"
+    testRuntimeOnly "ch.qos.logback:logback-classic:${commonGradleLogbackVersion}"
 }

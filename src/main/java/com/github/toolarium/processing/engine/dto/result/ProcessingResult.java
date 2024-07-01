@@ -3,9 +3,8 @@
  *
  * Copyright by toolarium, all rights reserved.
  */
-package com.github.toolarium.processing.engine.dto;
+package com.github.toolarium.processing.engine.dto.result;
 
-import com.github.toolarium.processing.unit.IProcessingStatistic;
 import com.github.toolarium.processing.unit.dto.ProcessingRuntimeStatus;
 import java.io.Serializable;
 import java.time.Instant;
@@ -32,11 +31,11 @@ public class ProcessingResult implements IProcessingResult, Serializable {
     private ProcessingRuntimeStatus processingRuntimeStatus;
     private boolean isAborted;
     private List<String> statusMessageList;
-    private IProcessingStatistic procesingStatistic;
+    private IProcessingStatistic processingStatistic;
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingResult#getInstance()
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getInstance()
      */
     @Override
     public String getInstance() {
@@ -55,7 +54,7 @@ public class ProcessingResult implements IProcessingResult, Serializable {
 
 
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingResult#getId()
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getId()
      */
     @Override
     public String getId() {
@@ -74,7 +73,7 @@ public class ProcessingResult implements IProcessingResult, Serializable {
 
 
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingResult#getName()
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getName()
      */
     @Override
     public String getName() {
@@ -94,7 +93,7 @@ public class ProcessingResult implements IProcessingResult, Serializable {
 
 
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingResult#getStartTimestamp()
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getStartTimestamp()
      */
     @Override
     public Instant getStartTimestamp() {
@@ -113,7 +112,7 @@ public class ProcessingResult implements IProcessingResult, Serializable {
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingResult#getStopTimestamp()
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getStopTimestamp()
      */
     @Override
     public Instant getStopTimestamp() {
@@ -132,7 +131,7 @@ public class ProcessingResult implements IProcessingResult, Serializable {
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingResult#getProcessingDuration()
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getProcessingDuration()
      */
     @Override
     public long getProcessingDuration() {
@@ -151,7 +150,7 @@ public class ProcessingResult implements IProcessingResult, Serializable {
 
 
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingResult#getNumberOfProcessedUnits()
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getNumberOfProcessedUnits()
      */
     @Override
     public long getNumberOfProcessedUnits() {
@@ -170,7 +169,7 @@ public class ProcessingResult implements IProcessingResult, Serializable {
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingResult#getNumberOfSuccessfulUnits()
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getNumberOfSuccessfulUnits()
      */
     @Override
     public long getNumberOfSuccessfulUnits() {
@@ -189,7 +188,7 @@ public class ProcessingResult implements IProcessingResult, Serializable {
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingResult#getNumberOfFailedUnits()
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getNumberOfFailedUnits()
      */
     @Override
     public long getNumberOfFailedUnits() {
@@ -208,7 +207,7 @@ public class ProcessingResult implements IProcessingResult, Serializable {
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingResult#getProcessingRuntimeStatus()
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getProcessingRuntimeStatus()
      */
     @Override
     public ProcessingRuntimeStatus getProcessingRuntimeStatus() {
@@ -227,7 +226,7 @@ public class ProcessingResult implements IProcessingResult, Serializable {
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingResult#isAborted()
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#isAborted()
      */
     @Override
     public boolean isAborted() {
@@ -246,7 +245,7 @@ public class ProcessingResult implements IProcessingResult, Serializable {
 
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingResult#getStatusMessageList()
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getStatusMessageList()
      */
     @Override
     public List<String> getStatusMessageList() {
@@ -263,23 +262,23 @@ public class ProcessingResult implements IProcessingResult, Serializable {
         this.statusMessageList = statusMessageList;
     }
 
+
     
     /**
-     * @see com.github.toolarium.processing.engine.dto.IProcessingResult#getProcesingStatistic()
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getProcesingStatistic()
      */
     @Override
     public IProcessingStatistic getProcesingStatistic() {
-        return procesingStatistic;
+        return null;
     }
-
     
     /**
      * Set the processing statistic
      *
-     * @param procesingStatistic the processing statistic
+     * @param processingStatistic the processing statistic
      */
-    public void setProcesingStatistic(IProcessingStatistic procesingStatistic) {
-        this.procesingStatistic = procesingStatistic;
+    public void setProcessingStatistic(IProcessingStatistic processingStatistic) {
+        this.processingStatistic = processingStatistic;
     }
 
 
@@ -289,7 +288,7 @@ public class ProcessingResult implements IProcessingResult, Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(durationInMilliseconds, id, isAborted, name, numberOfFailedUnits, numberOfProcessedUnits,
-                numberOfSuccessfulUnits, procesingStatistic, processingRuntimeStatus, startTimestamp, statusMessageList,
+                numberOfSuccessfulUnits, processingStatistic, processingRuntimeStatus, startTimestamp, statusMessageList,
                 stopTimestamp);
     }
 
@@ -319,7 +318,7 @@ public class ProcessingResult implements IProcessingResult, Serializable {
                 && numberOfFailedUnits == other.numberOfFailedUnits
                 && numberOfProcessedUnits == other.numberOfProcessedUnits
                 && numberOfSuccessfulUnits == other.numberOfSuccessfulUnits
-                && Objects.equals(procesingStatistic, other.procesingStatistic)
+                && Objects.equals(processingStatistic, other.processingStatistic)
                 && processingRuntimeStatus == other.processingRuntimeStatus
                 && Objects.equals(startTimestamp, other.startTimestamp)
                 && Objects.equals(statusMessageList, other.statusMessageList)
@@ -337,6 +336,6 @@ public class ProcessingResult implements IProcessingResult, Serializable {
                 + ", numberOfProcessedUnits=" + numberOfProcessedUnits + ", numberOfSuccessfulUnits="
                 + numberOfSuccessfulUnits + ", numberOfFailedUnits=" + numberOfFailedUnits
                 + ", processingRuntimeStatus=" + processingRuntimeStatus + ", isAborted=" + isAborted
-                + ", statusMessageList=" + statusMessageList + ", procesingStatistic=" + procesingStatistic + "]";
+                + ", statusMessageList=" + statusMessageList + ", processingStatistic=" + processingStatistic + "]";
     }
 }
