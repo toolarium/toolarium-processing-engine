@@ -10,7 +10,9 @@ A ProcessingUnit is a simple java class that implements the main part of a proce
 This means that you do not have to write any loops.
 
 The toolarium processing engine has the following features:
-- Lightweight processimg engine which is optimized for fast startups.
+- Lightweight processing engine which is optimized for fast startups.
+- Multi-threaded processing
+- Supports fast and reliable suspending of the engine even its resuming.
 
 ## Built With
 
@@ -39,5 +41,38 @@ dependencies {
 </dependency>
 ```
 
+## How to start
+```java
+    
+    // start process engine
+    IProcessEngine processEngine = ProcessingEngineFactory.getInstance().getProcessingEngine();
+    processEngine.addListener(new LogProcessingListener());
 
+    // register processings
+    IProcessingUnit p1 =  processEngine.getProcessingUnitRegistry().register(ProcessingUnitSample.class);
+    IProcessingUnit p2 = processEngine.getProcessingUnitRegistry().register(ProcessingUnitSample2.class.getName());
+        
+
+    // start processing
+    IProcessingUnitRunnable runnable1 = processEngine.execute(UUID.randomUUID().toString(), "test1", p1.getName(),
+                                                              List.of(new Parameter(ProcessingUnitSample.INPUT_FILENAME_PARAMETER.getKey(), "my-filename1")));
+    assertNotNull(runnable1);
+
+    IProcessingUnitRunnable runnable2 = processEngine.execute(UUID.randomUUID().toString(), "test2", p2.getName(),
+                                                              List.of(new Parameter(ProcessingUnitSample2.INPUT_FILENAME_PARAMETER.getKey(), "my-filename2")));
+    assertNotNull(runnable2);
+
+        
+    // wait processing
+    while (processEngine.getStatus().getNumberOfRunningProcessings() > 0) {
+       ThreadUtil.getInstance().sleep(500L);
+    }
+        
+    // shutdown processing
+    processEngine.shutdown();
+```
+
+
+## How to test
+The class com.github.toolarium.processing.unit.runtime.test.TestProcessingUnit implements a simple test processing which can simulate all kind of behaviours.
 
