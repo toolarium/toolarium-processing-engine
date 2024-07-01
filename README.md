@@ -1,85 +1,43 @@
+[![License](https://img.shields.io/github/license/toolarium/toolarium-processing-engine)](https://github.com/toolarium/toolarium-processing-engine/blob/master/LICENSE)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.toolarium/toolarium-processing-engine/0.4.0)](https://search.maven.org/artifact/com.github.toolarium/toolarium-processing-engine/0.4.0/jar)
+[![javadoc](https://javadoc.io/badge2/com.github.toolarium/toolarium-processing-engine/javadoc.svg)](https://javadoc.io/doc/com.github.toolarium/toolarium-processing-engine)
+
 # toolarium-processing-engine
 
-Implements the toolarium processing engine.
+Implements an open source processing engine which allows to run so-called [processing units (ProcessingUnit)](https://github.com/toolarium/toolarium-processing-unit/) to be executed.
 
-## Getting Started
+A ProcessingUnit is a simple java class that implements the main part of a processing. The framework is designed so that only the main part, the real processing, has to be implemented. 
+This means that you do not have to write any loops.
 
-These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
-
-### Prerequisites
-
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
-
-### Installing
-
-A step by step series of examples that tell you how to get a development env running
-
-Say what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
-
-## Running the tests
-
-Explain how to run the automated tests for this system
-
-### Break down into end to end tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-### And coding style tests
-
-Explain what these tests test and why
-
-```
-Give an example
-```
-
-## Deployment
-
-Add additional notes about how to deploy this on a live system
+The toolarium processing engine has the following features:
+- Lightweight processimg engine which is optimized for fast startups.
 
 ## Built With
 
 * [cb](https://github.com/toolarium/common-build) - The toolarium common build
 
-## Contributing
-
-Please read [CONTRIBUTING.md](https://gist.github.com/PurpleBooth/b24679402957c63ec426) for details on our code of conduct, and the process for submitting pull requests to us.
-
 ## Versioning
 
-We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/your/project/tags). 
+We use [SemVer](http://semver.org/) for versioning. For the versions available, see the [tags on this repository](https://github.com/toolarium/toolarium-processing-engine/tags). 
 
-## Authors
 
-* **Billie Thompson** - *Initial work* - [PurpleBooth](https://github.com/PurpleBooth)
+### Gradle:
 
-See also the list of [contributors](https://github.com/your/project/contributors) who participated in this project.
+```groovy
+dependencies {
+    implementation "com.github.toolarium:toolarium-processing-engine:0.4.0"
+}
+```
 
-## License
+### Maven:
 
-This project is licensed under the MIT License: https://mit-license.org - see the [LICENSE](LICENSE) file for details
+```xml
+<dependency>
+    <groupId>com.github.toolarium</groupId>
+    <artifactId>toolarium-processing-engine</artifactId>
+    <version>0.4.0</version>
+</dependency>
+```
 
-## Acknowledgments
 
-* Hat tip to anyone whose code was used
-* Inspiration
-* etc
+
