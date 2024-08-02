@@ -6,8 +6,6 @@
 package com.github.toolarium.processing.engine.unit;
 
 import com.github.toolarium.common.util.ThreadUtil;
-import com.github.toolarium.processing.unit.IProcessingUnitContext;
-import com.github.toolarium.processing.unit.IProcessingUnitProgress;
 import com.github.toolarium.processing.unit.IProcessingUnitStatus;
 import com.github.toolarium.processing.unit.ParameterDefinitionBuilder;
 import com.github.toolarium.processing.unit.ProcessingUnitStatusBuilder;
@@ -35,31 +33,30 @@ public class ProcessingUnitSample extends AbstractProcessingUnitImpl {
     
 
     /**
-     * @see com.github.toolarium.processing.unit.base.AbstractProcessingUnitImpl#estimateNumberOfUnitsToProcess(com.github.toolarium.processing.unit.IProcessingUnitContext)
+     * @see com.github.toolarium.processing.unit.base.AbstractProcessingUnitImpl#estimateNumberOfUnitsToProcess()
      */
     @Override
-    public long estimateNumberOfUnitsToProcess(IProcessingUnitContext processingUnitContext) {
+    public long estimateNumberOfUnitsToProcess() {
         // check how many entries we have to process, e.g. counting database records to process
         // it will be called just once, the first time before start processing
         // this number will be set in getProcessingProgress().setNumberOfUnitsToProcess(...) 
-        return 10;
+        return getProcessingUnitProgress().setNumberOfUnitsToProcess(10);
     }
     
-    
+
     /**
-     * @see com.github.toolarium.processing.unit.base.AbstractProcessingUnitImpl#processUnit(com.github.toolarium.processing.unit.IProcessingUnitContext)
+     * @see com.github.toolarium.processing.unit.base.AbstractProcessingUnitImpl#processUnit(com.github.toolarium.processing.unit.ProcessingUnitStatusBuilder)
      */
     @Override
-    public IProcessingUnitStatus processUnit(IProcessingUnitProgress processingProgress, IProcessingUnitContext processingUnitContext) throws ProcessingException {
-        ProcessingUnitStatusBuilder processingUnitStatusBuilder = new ProcessingUnitStatusBuilder(); 
-
+    public IProcessingUnitStatus processUnit(ProcessingUnitStatusBuilder processingUnitStatusBuilder) throws ProcessingException {
+        
         // This is the main part where the processing takes place
 
         // In case of successful processing
-        processingUnitStatusBuilder.processedSuccessful();
+        processingUnitStatusBuilder.increaseNumberOfSuccessfulUnits();
         
         // other wise if it was failed
-        //processingUnitStatusBuilder.processingUnitFailed();
+        //processingUnitStatusBuilder.increaseNumberOfFailedUnits();
 
         // During a processing step status message can be returned, a status SUCCESSFUL, WARN or ERROR. Additional a message can be set
         //processingUnitStatusBuilder.warn("Warning sample");
@@ -68,10 +65,10 @@ public class ProcessingUnitSample extends AbstractProcessingUnitImpl {
 
         // Support of statistic:
         //processingUnitStatusBuilder.statistic("counter", 1);
-        
+
         ThreadUtil.getInstance().sleep(40L);
-        
-        return processingUnitStatusBuilder.hasNext(processingProgress).build();
+
+        return processingUnitStatusBuilder.hasNextIfHasUnprocessedUnits().build();        
     }
 
     

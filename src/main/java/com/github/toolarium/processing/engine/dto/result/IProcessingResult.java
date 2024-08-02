@@ -18,14 +18,6 @@ import java.util.List;
 public interface IProcessingResult {
     
     /**
-     * Get the instance
-     *
-     * @return the instance
-     */
-    String getInstance();
-    
-    
-    /**
      * Get the id
      *
      * @return the id
@@ -40,6 +32,14 @@ public interface IProcessingResult {
      */
     String getName();
 
+    
+    /**
+     * Get the processing unit class name
+     *
+     * @return the processing unit class name
+     */
+    String getProcessingUnitClassname();
+    
     
     /**
      * Get the start time stamp
@@ -95,6 +95,14 @@ public interface IProcessingResult {
      * @return the number of failed units.
      */
     long getNumberOfFailedUnits();
+
+    
+    /**
+     * Get the progress
+     *
+     * @return the progress
+     */
+    int getProgress();
 
 
     /**

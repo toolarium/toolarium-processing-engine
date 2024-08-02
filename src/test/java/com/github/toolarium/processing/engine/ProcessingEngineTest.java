@@ -10,7 +10,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 
 import com.github.toolarium.common.util.TextUtil;
 import com.github.toolarium.common.util.ThreadUtil;
-import com.github.toolarium.processing.engine.dto.unit.IProcessingUnit;
+import com.github.toolarium.processing.engine.dto.unit.IProcessingUnitDefinition;
 import com.github.toolarium.processing.engine.impl.util.ProcessingPersistenceUtil;
 import com.github.toolarium.processing.engine.listener.LogProcessingListener;
 import com.github.toolarium.processing.engine.unit.ProcessingUnitSample;
@@ -42,16 +42,17 @@ public class ProcessingEngineTest {
         processEngine.addListener(new LogProcessingListener());
 
         // register processing
-        IProcessingUnit p1 =  processEngine.getProcessingUnitRegistry().register(ProcessingUnitSample.class);
-        IProcessingUnit p2 = processEngine.getProcessingUnitRegistry().register(ProcessingUnitSample2.class.getName());
-        
+        IProcessingUnitDefinition p1 =  processEngine.getProcessingUnitRegistry().register(ProcessingUnitSample.class);
+        LOG.debug("Parameters:" + p1.getParameterDefinitionList());
+        IProcessingUnitDefinition p2 = processEngine.getProcessingUnitRegistry().register(ProcessingUnitSample2.class.getName());
+        LOG.debug("Parameters:" + p2.getParameterDefinitionList());
 
         // start processing
-        IProcessingUnitRunnable runnable1 = processEngine.execute(UUID.randomUUID().toString(), "test1", p1.getName(),
+        IProcessingUnitRunnable runnable1 = processEngine.execute(UUID.randomUUID().toString(), "test1", p1.getProcessingClassname(),
                                                                   List.of(new Parameter(ProcessingUnitSample.INPUT_FILENAME_PARAMETER.getKey(), "my-filename1")));
         assertNotNull(runnable1);
 
-        IProcessingUnitRunnable runnable2 = processEngine.execute(UUID.randomUUID().toString(), "test2", p2.getName(),
+        IProcessingUnitRunnable runnable2 = processEngine.execute(UUID.randomUUID().toString(), "test2", p2.getProcessingClassname(),
                                                                   List.of(new Parameter(ProcessingUnitSample2.INPUT_FILENAME_PARAMETER.getKey(), "my-filename2")));
         assertNotNull(runnable2);
 
@@ -77,14 +78,14 @@ public class ProcessingEngineTest {
         processEngine.addListener(new LogProcessingListener());
 
         // register processing
-        IProcessingUnit p1 =  processEngine.getProcessingUnitRegistry().register(ProcessingUnitSample.class);
-        IProcessingUnit p2 = processEngine.getProcessingUnitRegistry().register(ProcessingUnitSample2.class.getName());
+        IProcessingUnitDefinition p1 = processEngine.getProcessingUnitRegistry().register(ProcessingUnitSample.class);
+        IProcessingUnitDefinition p2 = processEngine.getProcessingUnitRegistry().register(ProcessingUnitSample2.class.getName());
 
         // start processing
-        processEngine.execute(UUID.randomUUID().toString(), "test1", p1.getName(),
+        processEngine.execute(UUID.randomUUID().toString(), "test1", p1.getProcessingClassname(),
                               List.of(new Parameter(ProcessingUnitSample.INPUT_FILENAME_PARAMETER.getKey(), "my-filename1")));
 
-        processEngine.execute(UUID.randomUUID().toString(), "test2", p2.getName(),
+        processEngine.execute(UUID.randomUUID().toString(), "test2", p2.getProcessingClassname(),
                               List.of(new Parameter(ProcessingUnitSample2.INPUT_FILENAME_PARAMETER.getKey(), "my-filename2")));
 
         ThreadUtil.getInstance().sleep(10L);

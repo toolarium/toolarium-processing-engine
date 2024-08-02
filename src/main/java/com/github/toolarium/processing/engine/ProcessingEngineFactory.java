@@ -6,6 +6,9 @@
 package com.github.toolarium.processing.engine;
 
 import com.github.toolarium.processing.engine.impl.ProcessingEngineImpl;
+import com.github.toolarium.processing.unit.IProcessingUnit;
+import com.github.toolarium.processing.unit.runtime.IProcessingUnitInstanceManager;
+import com.github.toolarium.processing.unit.util.ProcessingUnitUtil;
 
 
 /**
@@ -14,7 +17,7 @@ import com.github.toolarium.processing.engine.impl.ProcessingEngineImpl;
  * @author patrick
  */
 public final class ProcessingEngineFactory {
-    
+
     /**
      * Private class, the only instance of the singelton which will be created by accessing the holder class.
      *
@@ -42,7 +45,17 @@ public final class ProcessingEngineFactory {
         return HOLDER.INSTANCE;
     }
 
+    
+    /**
+     * Set the processing unit instance manager. It is used to instantiate {@link IProcessingUnit}.
+     *
+     * @param processingUnitInstanceManager the processing unit instance manager
+     */
+    public void setProcessingUnitInstanceManager(IProcessingUnitInstanceManager processingUnitInstanceManager) {
+        ProcessingUnitUtil.getInstance().setProcessingUnitInstanceManager(processingUnitInstanceManager);
+    }
 
+    
     /**
      * Get a processing executer
      * 

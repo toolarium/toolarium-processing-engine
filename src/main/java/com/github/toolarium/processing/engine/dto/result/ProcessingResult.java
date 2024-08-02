@@ -19,40 +19,22 @@ import java.util.Objects;
  */
 public class ProcessingResult implements IProcessingResult, Serializable {
     private static final long serialVersionUID = -4202575498425188655L;
-    private String instance;
     private String id;
     private String name;
+    private String processingUnitClassname;
     private Instant startTimestamp;
     private Instant stopTimestamp;
     private long durationInMilliseconds;
     private long numberOfProcessedUnits;
     private long numberOfSuccessfulUnits;
     private long numberOfFailedUnits;
+    private int progress;
     private ProcessingRuntimeStatus processingRuntimeStatus;
     private boolean isAborted;
     private List<String> statusMessageList;
     private IProcessingStatistic processingStatistic;
 
     
-    /**
-     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getInstance()
-     */
-    @Override
-    public String getInstance() {
-        return instance;
-    }
-
-
-    /**
-     * Set the instance
-     *
-     * @param instance the instance
-     */
-    public void setInstance(String instance) {
-        this.instance = instance;
-    }
-
-
     /**
      * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getId()
      */
@@ -80,7 +62,6 @@ public class ProcessingResult implements IProcessingResult, Serializable {
         return name;
     }
 
-
     
     /**
      * Set the name
@@ -89,6 +70,25 @@ public class ProcessingResult implements IProcessingResult, Serializable {
      */
     public void setName(String name) {
         this.name = name;
+    }
+
+    
+    /**
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getProcessingUnitClassname()
+     */
+    @Override
+    public String getProcessingUnitClassname() {
+        return processingUnitClassname;
+    }
+
+    
+    /**
+     * Set the processing unit class name
+     *
+     * @param processingUnitClassname the processing unit class name
+     */
+    public void setProcessingUnitClassname(String processingUnitClassname) {
+        this.processingUnitClassname = processingUnitClassname;
     }
 
 
@@ -207,6 +207,25 @@ public class ProcessingResult implements IProcessingResult, Serializable {
 
     
     /**
+     * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getProgress()
+     */
+    @Override
+    public int getProgress() {
+        return progress;
+    }
+
+    
+    /**
+     * Set the progress in percentage
+     *
+     * @param progress the progress in percentage
+     */
+    public void setProgress(int progress) {
+        this.progress = progress;
+    }
+
+    
+    /**
      * @see com.github.toolarium.processing.engine.dto.result.IProcessingResult#getProcessingRuntimeStatus()
      */
     @Override
@@ -288,8 +307,8 @@ public class ProcessingResult implements IProcessingResult, Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(durationInMilliseconds, id, isAborted, name, numberOfFailedUnits, numberOfProcessedUnits,
-                numberOfSuccessfulUnits, processingStatistic, processingRuntimeStatus, startTimestamp, statusMessageList,
-                stopTimestamp);
+                numberOfSuccessfulUnits, processingRuntimeStatus, processingStatistic, processingUnitClassname,
+                progress, startTimestamp, statusMessageList, stopTimestamp);
     }
 
 
@@ -311,15 +330,14 @@ public class ProcessingResult implements IProcessingResult, Serializable {
         }
         
         ProcessingResult other = (ProcessingResult) obj;
-        return durationInMilliseconds == other.durationInMilliseconds 
-                && Objects.equals(instance, other.instance)
-                && Objects.equals(id, other.id)
+        return durationInMilliseconds == other.durationInMilliseconds && Objects.equals(id, other.id)
                 && isAborted == other.isAborted && Objects.equals(name, other.name)
                 && numberOfFailedUnits == other.numberOfFailedUnits
                 && numberOfProcessedUnits == other.numberOfProcessedUnits
                 && numberOfSuccessfulUnits == other.numberOfSuccessfulUnits
-                && Objects.equals(processingStatistic, other.processingStatistic)
                 && processingRuntimeStatus == other.processingRuntimeStatus
+                && Objects.equals(processingStatistic, other.processingStatistic)
+                && Objects.equals(processingUnitClassname, other.processingUnitClassname) && progress == other.progress
                 && Objects.equals(startTimestamp, other.startTimestamp)
                 && Objects.equals(statusMessageList, other.statusMessageList)
                 && Objects.equals(stopTimestamp, other.stopTimestamp);
@@ -331,10 +349,11 @@ public class ProcessingResult implements IProcessingResult, Serializable {
      */
     @Override
     public String toString() {
-        return "ProcessingResult [instance=" + instance + ", id=" + id + ", name=" + name + ", startTimestamp=" + startTimestamp
-                + ", stopTimestamp=" + stopTimestamp + ", durationInMilliseconds=" + durationInMilliseconds
-                + ", numberOfProcessedUnits=" + numberOfProcessedUnits + ", numberOfSuccessfulUnits="
-                + numberOfSuccessfulUnits + ", numberOfFailedUnits=" + numberOfFailedUnits
+        return "ProcessingResult [id=" + id + ", name=" + name + ", processingUnitClassname=" + processingUnitClassname
+                + ", startTimestamp=" + startTimestamp + ", stopTimestamp=" + stopTimestamp
+                + ", durationInMilliseconds=" + durationInMilliseconds + ", numberOfProcessedUnits="
+                + numberOfProcessedUnits + ", numberOfSuccessfulUnits=" + numberOfSuccessfulUnits
+                + ", numberOfFailedUnits=" + numberOfFailedUnits + ", progress=" + progress
                 + ", processingRuntimeStatus=" + processingRuntimeStatus + ", isAborted=" + isAborted
                 + ", statusMessageList=" + statusMessageList + ", processingStatistic=" + processingStatistic + "]";
     }

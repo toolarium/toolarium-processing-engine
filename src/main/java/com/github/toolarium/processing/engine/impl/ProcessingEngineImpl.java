@@ -105,7 +105,7 @@ public class ProcessingEngineImpl implements IProcessEngine {
         IProcessingUnitContext processingUnitContext = null;
         return processingExecuter.execute(id, 
                                           name, 
-                                          getProcessingUnitRegistry().getProcessingUnitList(processingUnitClass).getProcessingUnitClass(), 
+                                          getProcessingUnitRegistry().getProcessingUnitList(processingUnitClass).getProcessingClass(), 
                                           parameterList, 
                                           processingUnitContext);
     }

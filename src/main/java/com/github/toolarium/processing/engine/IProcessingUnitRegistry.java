@@ -5,8 +5,9 @@
  */
 package com.github.toolarium.processing.engine;
 
-import com.github.toolarium.processing.engine.dto.unit.IProcessingUnit;
+import com.github.toolarium.processing.engine.dto.unit.IProcessingUnitDefinition;
 import com.github.toolarium.processing.engine.exception.ValidationException;
+import com.github.toolarium.processing.unit.IProcessingUnit;
 import java.util.Set;
 
 
@@ -24,7 +25,7 @@ public interface IProcessingUnitRegistry {
      * @return the registered processing unit
      * @throws ValidationException In case of a validation exception
      */
-    IProcessingUnit register(Class<? extends com.github.toolarium.processing.unit.IProcessingUnit> processingUnit) throws ValidationException;
+    IProcessingUnitDefinition register(Class<? extends IProcessingUnit> processingUnit) throws ValidationException;
 
 
     /**
@@ -34,7 +35,7 @@ public interface IProcessingUnitRegistry {
      * @return the registered processing unit
      * @throws ValidationException In case of a validation exception
      */
-    IProcessingUnit register(String processingUnitClassName) throws ValidationException;
+    IProcessingUnitDefinition register(String processingUnitClassName) throws ValidationException;
 
 
     /**
@@ -44,7 +45,7 @@ public interface IProcessingUnitRegistry {
      * @return the unregistered processing unit
      * @throws ValidationException In case of a validation exception
      */
-    IProcessingUnit unregister(Class<? extends com.github.toolarium.processing.unit.IProcessingUnit> processingUnit) throws ValidationException;
+    IProcessingUnitDefinition unregister(Class<? extends IProcessingUnit> processingUnit) throws ValidationException;
 
 
     /**
@@ -54,7 +55,7 @@ public interface IProcessingUnitRegistry {
      * @return the unregistered processing unit
      * @throws ValidationException In case of a validation exception
      */
-    IProcessingUnit unregister(String processingUnitClassName) throws ValidationException;
+    IProcessingUnitDefinition unregister(String processingUnitClassName) throws ValidationException;
 
     
     /**
@@ -63,7 +64,7 @@ public interface IProcessingUnitRegistry {
      * @param processingUnit the processing unit class
      * @return true if it is already registered
      */
-    boolean isRegistered(Class<? extends com.github.toolarium.processing.unit.IProcessingUnit> processingUnit);
+    boolean isRegistered(Class<? extends IProcessingUnit> processingUnit);
 
 
     /**
@@ -81,7 +82,7 @@ public interface IProcessingUnitRegistry {
      * @param processingUnitClassName the processing unit class name
      * @return the processing unit reference
      */
-    IProcessingUnitReference getProcessingUnitList(String processingUnitClassName);
+    IProcessingUnitDefinition getProcessingUnitList(String processingUnitClassName);
 
 
     /**
@@ -90,39 +91,5 @@ public interface IProcessingUnitRegistry {
      * @param filterName the filter name
      * @return processing unit the reference list
      */
-    Set<IProcessingUnitReference> searchProcessingUnitList(String filterName);
-
-    
-    /**
-     * Get the processing unit instance
-     *
-     * @param processingUnitClassName the processing unit class name
-     * @return the processing unit instance
-     * @throws ValidationException In case of a validation exception
-     */
-    com.github.toolarium.processing.unit.IProcessingUnit newInstance(String processingUnitClassName) throws ValidationException;
-
-
-
-    /**
-     * Defines the processing unit holder
-     * 
-     * @author patrick
-     */
-    interface IProcessingUnitReference {
-
-        /**
-         * Get the processing unit
-         *
-         * @return the processing unit
-         */
-        IProcessingUnit getProcessingUnit();
-
-        /**
-         * Get the processing unit class
-         *
-         * @return the processing unit class
-         */
-        Class<? extends com.github.toolarium.processing.unit.IProcessingUnit> getProcessingUnitClass(); // TODO: string
-    }
+    Set<IProcessingUnitDefinition> searchProcessingUnitList(String filterName);
 }
