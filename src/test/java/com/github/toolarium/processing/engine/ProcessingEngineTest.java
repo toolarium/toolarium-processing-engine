@@ -11,7 +11,6 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.github.toolarium.common.util.TextUtil;
 import com.github.toolarium.common.util.ThreadUtil;
 import com.github.toolarium.processing.engine.dto.unit.IProcessingUnitDefinition;
-import com.github.toolarium.processing.engine.impl.executer.dto.ProcessingExecuterPersistenceContainer;
 import com.github.toolarium.processing.engine.impl.util.ProcessingPersistenceUtil;
 import com.github.toolarium.processing.engine.listener.LogProcessingListener;
 import com.github.toolarium.processing.engine.unit.ProcessingUnitSample;
