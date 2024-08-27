@@ -1,5 +1,5 @@
 [![License](https://img.shields.io/github/license/toolarium/toolarium-processing-engine)](https://github.com/toolarium/toolarium-processing-engine/blob/master/LICENSE)
-[![Maven Central](https://img.shields.io/maven-central/v/com.github.toolarium/toolarium-processing-engine/0.5.0)](https://search.maven.org/artifact/com.github.toolarium/toolarium-processing-engine/0.5.0/jar)
+[![Maven Central](https://img.shields.io/maven-central/v/com.github.toolarium/toolarium-processing-engine/0.5.1)](https://search.maven.org/artifact/com.github.toolarium/toolarium-processing-engine/0.5.1/jar)
 [![javadoc](https://javadoc.io/badge2/com.github.toolarium/toolarium-processing-engine/javadoc.svg)](https://javadoc.io/doc/com.github.toolarium/toolarium-processing-engine)
 
 # toolarium-processing-engine
@@ -27,7 +27,7 @@ We use [SemVer](http://semver.org/) for versioning. For the versions available, 
 
 ```groovy
 dependencies {
-    implementation "com.github.toolarium:toolarium-processing-engine:0.5.0"
+    implementation "com.github.toolarium:toolarium-processing-engine:0.5.1"
 }
 ```
 
@@ -37,7 +37,7 @@ dependencies {
 <dependency>
     <groupId>com.github.toolarium</groupId>
     <artifactId>toolarium-processing-engine</artifactId>
-    <version>0.5.0</version>
+    <version>0.5.1</version>
 </dependency>
 ```
 
