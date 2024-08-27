@@ -46,6 +46,15 @@ public interface IProcessEngine {
 
     
     /**
+     * Execute the persisted process units
+     *
+     * @param persistedContent the persisted content from a shutdown
+     * @return the added {@link IProcessingUnitRunnable} list.
+     */
+    List<IProcessingUnitRunnable> execute(byte[] persistedContent);
+
+
+    /**
      * Get the status back
      *
      * @return the status

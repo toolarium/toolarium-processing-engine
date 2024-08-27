@@ -18,6 +18,7 @@ import com.github.toolarium.processing.engine.impl.util.ProcessingPersistenceUti
 import com.github.toolarium.processing.unit.IProcessingUnitContext;
 import com.github.toolarium.processing.unit.dto.Parameter;
 import com.github.toolarium.processing.unit.runtime.runnable.IProcessingUnitRunnable;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -52,7 +53,7 @@ public class ProcessingEngineImpl implements IProcessEngine {
         this();
         
         if (persistedContent != null && persistedContent.length > 0) {
-            processingExecuter.execute(ProcessingPersistenceUtil.getInstance().toProcessingExecuterPersistenceContainer(persistedContent));
+            execute(persistedContent);
         }
     }
     
@@ -108,6 +109,19 @@ public class ProcessingEngineImpl implements IProcessEngine {
                                           getProcessingUnitRegistry().getProcessingUnitList(processingUnitClass).getProcessingClass(), 
                                           parameterList, 
                                           processingUnitContext);
+    }
+
+
+    /**
+     * @see com.github.toolarium.processing.engine.IProcessEngine#execute(byte[])
+     */
+    @Override
+    public List<IProcessingUnitRunnable> execute(byte[] persistedContent) {
+        if (persistedContent != null && persistedContent.length > 0) {
+            return processingExecuter.execute(ProcessingPersistenceUtil.getInstance().toProcessingExecuterPersistenceContainer(persistedContent));
+        }
+        
+        return Collections.emptyList();
     }
 
 

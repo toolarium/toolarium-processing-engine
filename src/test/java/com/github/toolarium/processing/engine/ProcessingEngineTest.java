@@ -11,6 +11,7 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import com.github.toolarium.common.util.TextUtil;
 import com.github.toolarium.common.util.ThreadUtil;
 import com.github.toolarium.processing.engine.dto.unit.IProcessingUnitDefinition;
+import com.github.toolarium.processing.engine.impl.executer.dto.ProcessingExecuterPersistenceContainer;
 import com.github.toolarium.processing.engine.impl.util.ProcessingPersistenceUtil;
 import com.github.toolarium.processing.engine.listener.LogProcessingListener;
 import com.github.toolarium.processing.engine.unit.ProcessingUnitSample;
@@ -110,5 +111,75 @@ public class ProcessingEngineTest {
         // shutdown processing
         persistedContent = processEngine.shutdown();
         assertNull(persistedContent); // if there were no processings it is null!
+    }
+
+    
+    /**
+     * Tets
+     */
+    @Test
+    public void testSuspendTwoEnginesAndResumeByOne() {
+        IProcessEngine processEngineA = ProcessingEngineFactory.getInstance().getProcessingEngine();
+        processEngineA.addListener(new LogProcessingListener());
+
+        // register processing
+        IProcessingUnitDefinition p1 = processEngineA.getProcessingUnitRegistry().register(ProcessingUnitSample.class);
+        IProcessingUnitDefinition p2 = processEngineA.getProcessingUnitRegistry().register(ProcessingUnitSample2.class.getName());
+
+        // start processing
+        processEngineA.execute(UUID.randomUUID().toString(), "test1", p1.getProcessingClassname(),
+                               List.of(new Parameter(ProcessingUnitSample.INPUT_FILENAME_PARAMETER.getKey(), "my-filename1")));
+
+        processEngineA.execute(UUID.randomUUID().toString(), "test2", p2.getProcessingClassname(),
+                               List.of(new Parameter(ProcessingUnitSample2.INPUT_FILENAME_PARAMETER.getKey(), "my-filename2")));
+
+        ThreadUtil.getInstance().sleep(10L);
+
+        byte[] persistedContentA = processEngineA.shutdown();
+        assertNotNull(persistedContentA); 
+        LOG.info("Persisted state:" + TextUtil.NL + ProcessingPersistenceUtil.getInstance().toString(persistedContentA));
+        processEngineA = null;
+
+        // start seconds process engine
+        IProcessEngine processEngineB = ProcessingEngineFactory.getInstance().getProcessingEngine();
+        processEngineB.addListener(new LogProcessingListener());
+
+        // register processing
+        IProcessingUnitDefinition p3 = processEngineB.getProcessingUnitRegistry().register(ProcessingUnitSample.class);
+        IProcessingUnitDefinition p4 = processEngineB.getProcessingUnitRegistry().register(ProcessingUnitSample2.class.getName());
+
+        // start processing
+        processEngineB.execute(UUID.randomUUID().toString(), "test3", p3.getProcessingClassname(),
+                               List.of(new Parameter(ProcessingUnitSample.INPUT_FILENAME_PARAMETER.getKey(), "my-filename3")));
+
+        processEngineB.execute(UUID.randomUUID().toString(), "test4", p4.getProcessingClassname(),
+                               List.of(new Parameter(ProcessingUnitSample2.INPUT_FILENAME_PARAMETER.getKey(), "my-filename4")));
+
+        ThreadUtil.getInstance().sleep(10L);
+
+        // suspend all processings
+        byte[] persistedContentB = processEngineB.shutdown();
+        assertNotNull(persistedContentB); 
+        LOG.info("Persisted state:" + TextUtil.NL + ProcessingPersistenceUtil.getInstance().toString(persistedContentB));
+        processEngineB = null;
+
+        
+        // resume first engine
+        LOG.info("Resume...");
+        processEngineA = ProcessingEngineFactory.getInstance().getProcessingEngine(persistedContentA);
+        processEngineA.addListener(new LogProcessingListener());
+
+        // resume second engine into the first one
+        processEngineA.execute(persistedContentB);
+        
+        // wait processing
+        while (processEngineA.getStatus().getNumberOfRunningProcessings() > 0) {
+            LOG.debug("WAIT");
+            ThreadUtil.getInstance().sleep(500L);
+        }
+        
+        // shutdown processing
+        persistedContentA = processEngineA.shutdown();
+        assertNull(persistedContentA); // if there were no processings it is null!
     }
 }
